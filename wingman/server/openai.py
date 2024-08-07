@@ -2,7 +2,6 @@ from langchain_openai import ChatOpenAI
 
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.agents import AgentFinish
 from langchain_core.runnables import RunnableLambda
 
 from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
@@ -55,8 +54,6 @@ def fil(x):
         tool_calls_client = [tool for tool in x.tool_calls if is_client_side(tool['name'])]
         x.tool_calls = [tool for tool in x.tool_calls if not is_client_side(tool['name'])]
 
-        #x.tool_call_chunks = []
-        #x.response_metadata['finish_reason'] = 'stop'
         x.additional_kwargs['tool_calls'] = x.tool_calls
     return x
 

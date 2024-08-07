@@ -1,10 +1,8 @@
 from langserve import RemoteRunnable
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_core.messages import ToolMessage, AIMessage, AIMessageChunk
+from langchain_core.messages import ToolMessage
 
 import asyncio
-
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
 
 from ..tools import client_side
 
@@ -58,6 +56,7 @@ async def invoke(prompt):
   response = await call(chat_history)
   while 'tool_calls' in response and len(response["tool_calls"]) > 0:
     for tool in response['tool_calls']:
+      print("--")
       print(f"Starting tool: {tool['name']} with inputs: {tool['args']}")
       result = client_side.execute(tool['name'], tool['args'])
       print(f"Done tool: {tool['name']}")
@@ -74,7 +73,7 @@ async def main():
     await invoke(text)
     if "bye" in  text:
       break
-    print()
+    print("\n")    
     text = input("You: ")
 
 asyncio.run(main())
