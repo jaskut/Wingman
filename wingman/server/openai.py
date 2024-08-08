@@ -9,10 +9,7 @@ from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputP
 from langchain.agents import AgentExecutor
 
 from ..tools import tools, is_client_side
-
-from dotenv import load_dotenv
-
-load_dotenv()
+from .. import config
 
 tool_calls_client = []
 
@@ -61,14 +58,14 @@ prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are a helpful assistant. Answer all questions to the best of your ability and search information you do not posess.",
+            config.system_description,
         ),
         MessagesPlaceholder(variable_name="chat_history"),
         MessagesPlaceholder(variable_name="agent_scratchpad"),
     ]
 )
 
-model = ChatOpenAI(model="gpt-3.5-turbo")
+model = ChatOpenAI(model=config.openai_model)
 model_with_tools = model.bind_tools(tools)
 
 agent = (

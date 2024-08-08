@@ -6,8 +6,10 @@ import asyncio
 
 from ..tools import client_side
 
-url = "http://localhost:8000"
-endpoint = "/openai"
+from .. import config
+
+url = f"http://{config.server_host}:{config.server_port}"
+endpoint = f"/{config.openai_endpoint}"
 
 openai = RemoteRunnable(url + endpoint)
 chat_history = ChatMessageHistory()
@@ -62,7 +64,7 @@ async def invoke(prompt):
       print(f"Done tool: {tool['name']}")
       print(f"Tool output was: {result}")
       print("--")
-      chat_history.add_message(ToolMessage(content=result, name=tool['name'], tool_call_id=tool['id']))
+      chat_history.add_message(ToolMessage(content=str(result), name=tool['name'], tool_call_id=tool['id']))
     response = await call(chat_history)
   
 
